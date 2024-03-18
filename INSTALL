@@ -1,0 +1,82 @@
+Installation instructions:
+*************************
+
+You can build the  Klafs vDC using the following commands:
+
+autoreconf -i
+./configure
+make
+
+after this you should find the built binary vdC in folder "klafs" with name vdc-klafs.
+
+Avahi configuration:
+********************
+In order for the vDC to be able to announce itself to the DSS in the same network, the avahi service (must be installed!) on the host running the vDC needs to be configured.
+Create a new file  /etc/avahi/services/ds-services with following content:
+
+
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+<name replace-wildcards="no">DS Controller @raspberrypi</name>
+<service protocol="ipv4">
+<type>_ds-vdc._tcp</type>
+<port>8444</port>
+</service>
+</service-group>
+
+
+Required libraries:
+********************
+
+This vDC requires the following DigitalStrom libraries:
+
+https://git.digitalstrom.org/ds485-stack/libdsuid.git
+https://git.digitalstrom.org/virtual-devices/libdsvdc.git
+
+These libraries must be build and installed before the Klafs vDC can be built.
+
+To build and install the libraries:
+
+autoreconf -i
+./configure
+make
+make install
+
+These libraries also have some requirements. If you see errors during configure that a library / package is not found you have to install it using your linux package manager (e.g. apt-get):
+
+Without guarantee of completeness you need the following packages on your linux system to build the libraries and the Klafs vDC:
+
+autoconf
+git
+make
+gcc
+g++
+libtool
+gettext
+libossp-uuid
+libossp-uuid16
+libossp-uuid-dev
+uthash
+uthash-dev
+libgdbm-dev
+libprotobuf-c-dev
+protobuf-c-compiler
+libgdbm-dev
+libjsoncpp1
+libjsoncpp-dev
+libjson-c-dev
+libconfig-dev
+libcurl4-nss-dev
+avahi-daemon
+avahi-discover
+libavahi-core-dev
+libavahi-client-dev
+libcheck
+libcheck-dev
+
+
+
+
+
+

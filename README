@@ -1,0 +1,320 @@
+Configuration
+--------------
+
+This vDC requires a configuration file called klafs.cfg in the same folder as the vDC.
+If you start the vDC without an existing configuration file, a new one will be created containing the required parameters. vDC will terminate after this.
+Change the parameters according to your requirements and start the vDC again.
+
+Following is a description of each parameter:
+
+vdcdsuid  -> this is a unique DS id and will be automatically created; just leave empty in config file
+username  -> "your klafs sauna app loginname" see http://sauna-app.klafs.com
+password  -> "your klafs sauna app password"  see http://sauna-app.klafs.com
+pin       -> your PIN of your sauna
+aspxauth  -> will be automatically filled after a succesfull login to klafs sauna app; just leave empty in config file
+reload_values -> time in seconds after which new values are pulled from klafs server
+zone_id   -> DigitalStrom zone id
+debug     -> Logging level for the vDC  - 7 debug / all messages  ; 0 nearly no messages;
+
+Section "sauna" contains the sauna configuration and preferred sauna settings for DS scenes:
+
+sauna : id -> the klafs Id of ypur Sauna. Currently must be manually detected. Goto http://sauna-app.klafs.com, login with your account, you will see in webbrowser address an url like this:
+              http://sauna-app.klafs.com/Control/RemoteControl?s=<xxxxxxxx-yyyy-zzzz-wwww-nnnnnnnnnnnn>
+              xxxxxxxx-yyyy-zzzz-wwww-nnnnnnnnnnnn is your Klafs Sauna Id. 
+              The vDC currently supports only one sauna (in case you should have more than one ;))
+              
+sauna : name -> Any name for your Sauna
+
+sauna : scenes : s0 to s19 (current maximum is 128 scenes)
+        dsId -> Id of the DigitalStrom scene ; Scene 1 is dsId = 5, Scene 2 is dsID = 17, Scene 3 is dsId = 18, Scene 4 is dsId = 19 (see table 1 below)
+        isPoweredOn -> defines if calling this scene shall switch on or off the sauna; in case for switch of (isPoweredOn = 0) no more of the following parameters are required
+        saunaSelected -> 1 for sauna mode         (only 1 mode is allowed to be 1, the other two modes must be 0!)
+        sanariumSelected -> 1 for sanarium mode   (only 1 mode is allowed to be 1, the other two modes must be 0!) 
+        irSelected -> 1 for Infrared mode         (only 1 mode is allowed to be 1, the other two modes must be 0!)
+        selectedSaunaTemperature -> target sauna temperature
+        selectedSanariumTemperature -> target sanarium temperature
+        selectedIrTemperature -> target infrared temperature 
+        selectedHumLevel -> target humiditi level (only for sanarium mode relevant)
+        selectedIrLevel -> target ir temperature
+        bathingHours = 4; -> Maximum Zeit für die die Sauna eingeschaltet wird
+        bathingMinutes = 0; -> Maximum Zeit für die die Sauna eingeschaltet wird
+        selectedHour = -1;  -> Zeitvorwahl wann die Sauna eingeschaltet werden soll, bei -1 wird die aktuelle Zeit verwendet (Sauna wird sofort eingeschaltet)
+        selectedMinute = -1;  -> Zeitvorwahl wann die Sauna eingeschaltet werden soll, bei -1 wird die aktuelle Zeit verwendet (Sauna wird sofort eingeschaltet)
+
+Section "binary_values" contains the Klafs sauna values which should be reported as binary sensor ("Schaltsensor") to DSS. You should only use the parameters which are reported as 0 / 1 from Klafs sauna API as binary values (see table 5 below)
+
+binary_values : b0 to b4 (current maximum is 5 binary sensors)
+        value_name -> name of the Klafs sauna data parameter to be evaluated (see table below for all parameters which the Klafs API currently provides)
+        sensor_function -> DS specific (see table 2 below); you can configure a specific type for each binary_value, the type will be shown in DSS configurator; not all types make sense for a sauna.
+
+
+Section "sensor_values" contains the Klafs saune values which should be reported as value sensor ("Sensorwert") to DSS
+
+sensor_values : s0 to s4 (current maximum is 5 value sensors)
+        value_name -> name of the Klafs sauna data parameter to be evaluated (see table 5 below for all parameters which the Klafs API currently provides)
+        sensor_type -> DS specific value (see table 3 below) 
+        sensor_usage -> DS specific value (see table 4 below)
+        
+        
+
+Tables:
+--------
+
+Table 1 - DS scene names ans correpsonding id to be used in config parameters sauna : scenes : s(x) -> dsId:
+
+Scene name    dsId
+--------------------
+Stimmung aus      0
+Stimmung 1        5
+Stimmung 2       17
+Stimmung 3       18 
+Stimmung 4       19
+Stimmung 11      33
+Stimmung 12      20
+Stimmung 13      21
+Stimmung 14      22
+Stimmung 21      35
+Stimmung 22      23
+Stimmung 23      24
+Stimmung 24      25
+Stimmung 31      37
+Stimmung 32      26
+Stimmung 33      27
+Stimmung 34      28
+Stimmung 41      39
+Stimmung 42      29
+Stimmung 43      30
+Stimmung 44      31
+Panik            65
+Schlafen         69
+Aufwachen        70
+Kommen           71
+Gehen            72
+Feuer            76
+Wind             86
+Regen            88
+Hagel            90  
+Gerät aus        13
+Gerät ein        14
+
+
+Table 2 - DS specific sensor function to be used in config parameters binary_values : b(x) -> sensor_function:
+
+sensor_function   Description
+----------------------------------------
+1                 Presence
+2                 Brightness
+3                 Presence in darkness
+4                 Twilight
+5                 Motion
+6                 Motion in darkness
+7                 Smoke
+8                 Wind strength above limit
+9                 Rain
+10                Sun radiation
+11                Temperature below limit
+12                Battery status is low
+13                Window is open
+14                Door is open
+15                Window is tilted
+16                Garage door is open
+17                Sun protection
+18                Frost
+19                Heating system enabled
+20                Change over signal
+21                Initialization status
+22                Malfunction
+23                Service
+
+Table 3 - DS specific sensor type to be used in config parameters sensor_values : s(x) -> sensor_type:
+
+sensor_type   Description
+----------------------------------------
+1               Temperature (C)
+2               Relative Humidity (%)
+3               Brightness (Lux)
+16              Air pressure (Pascal)
+19              Wind direction (degrees)
+20              Sound pressure (dB)
+22              Room Carbon Dioxide (CO2)
+31              Time (second)
+
+
+Table 4 - DS specific sensor usage to be used in config parameters sensor_values : s(x) -> sensor_usage:
+
+sensor_usage   Description
+----------------------------------------
+0                outdoor sensor
+1                indoor sensor
+        
+Table 5 - data values which the Klafs API provides. If you want that one or multiple of them sahll be sent to DSS you have to configure them in the binary_values or sensor_values section of the config file (see example below)
+
+name of data value            description                                                                          use as                           possible values 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+saunaSelected                 value 1 of Klafs sauna shall be switched to sauna mode                             binary_values                         0 or 1
+sanariumSelected              value 1 of Klafs sauna shall be switched to sanarium mode                          binary_values                         0 or 1
+irSelected                    value 1 of Klafs sauna shall be switched to infrared mode                          binary_values                         0 or 1
+selectedSaunaTemperature      currently selected sauna target temperature                                        sensor_values                         any number between 0 and 100 
+selectedSanariumTemperature   currently selected sanarium target temperature                                     sensor_values                         any number between 0 and 75
+selectedIrTemperature         currently selected infrared target temperature                                     sensor_values                         any number between 0 and ??? (I do not have Infrared model)
+selectedHumLevel              currently selected humidity level for sanarium mode                                sensor_values                         any number between 0 and 10
+selectedIrLevel               currently selected infrared level for infrared mode                                sensor_values                         any number between 0 and ??? (I do not have Infrared model)
+isConnected                   value 1 if sauna is connected to Klafs server                                      binary_values                         0 or 1
+isPoweredOn                   value 1 if sauna is running / heating                                              binary_values                         0 or 1
+isReadyForUse                 value 1 if sauna has reached target temperature                                    binary_values                         0 or 1
+currentTemperature            current temperature (is reported correctly only whne isPoweredOn=1!)               sensor_values                         any number between 0 and 100 
+currentHumidity               current humidity (is reported correctly only when isPoweredOn=1!)                  sensor_values                         any number between 0 and 10
+bathingHours                  hours sauna is already running (is reported correctly only when isPoweredOn=1!)    sensor_values                         any number between 0 and 3
+bathingMinutes                minutes sauna is already running (is reported correctly only when isPoweredOn=1!)  sensor_values                         any number between 0 and 59
+
+
+Sample of a valid klafs.cfg file with useful settings:
+------------------------------------------------------
+
+vdcdsuid = "1111111111111111111111111111111111";
+username = "your klafs sauna app loginname";
+password = "your klafs sauna app password";
+pin = 1234
+aspxauth = ".ASPXAUTH=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+reload_values = 60;
+zone_id = 65534;
+debug = 7;
+sauna : 
+{
+  id = "xxxxxxxx-yyyy-zzzz-wwww-nnnnnnnnnnnn";
+  name = "Klafs S1";
+  scenes : 
+  {
+    s0 : 
+    {
+      dsId = 0;
+      isPoweredOn = 0;
+    };
+    s1 : 
+    {
+      dsId = 13;
+      isPoweredOn = 0;
+    };
+    s2 : 
+    {
+      dsId = 14;
+      isPoweredOn = 1;
+      saunaSelected = 1;
+      sanariumSelected = 0;
+      irSelected = 0;
+      selectedSaunaTemperature = 0;
+      selectedSanariumTemperature = 0;
+      selectedIrTemperature = 0;
+      selectedHumLevel = 0;
+      selectedIrLevel = 0;
+      showBathingHour = true;
+      bathingHours = 4;
+      bathingMinutes = 0;
+    };
+    s3 : 
+    {
+      dsId = 5;
+      isPoweredOn = 1;
+      saunaSelected = 1;
+      sanariumSelected = 0;
+      irSelected = 0;
+      selectedSaunaTemperature = 85;
+      selectedSanariumTemperature = 50;
+      selectedIrTemperature = 0;
+      selectedHumLevel = 0;
+      selectedIrLevel = 0;
+      showBathingHour = true;
+      bathingHours = 4;
+      bathingMinutes = 0;
+    };
+    s4 : 
+    {
+      dsId = 17;
+      isPoweredOn = 1;
+      saunaSelected = 1;
+      sanariumSelected = 0;
+      irSelected = 0;
+      selectedSaunaTemperature = 70;
+      selectedSanariumTemperature = 50;
+      selectedIrTemperature = 0;
+      selectedHumLevel = 0;
+      selectedIrLevel = 0;
+      showBathingHour = true;
+      bathingHours = 4;
+      bathingMinutes = 0;
+    };
+    s5 :
+    {
+      dsId = 18;
+      isPoweredOn = 1;
+      saunaSelected = 0;
+      sanariumSelected = 1;
+      irSelected = 0;
+      selectedSaunaTemperature = 70;
+      selectedSanariumTemperature = 65;
+      selectedIrTemperature = 0;
+      selectedHumLevel = 8;
+      selectedIrLevel = 0;
+      showBathingHour = true;
+      bathingHours = 4;
+      bathingMinutes = 0;
+    };
+    s6 :
+    {
+      dsId = 19;
+      isPoweredOn = 1;
+      saunaSelected = 0;
+      sanariumSelected = 1;
+      irSelected = 0;
+      selectedSaunaTemperature = 70;
+      selectedSanariumTemperature = 55;
+      selectedIrTemperature = 0;
+      selectedHumLevel = 3;
+      selectedIrLevel = 0;
+      showBathingHour = true;
+      bathingHours = 4;
+      bathingMinutes = 0;
+    };
+  };
+};
+binary_values :
+{
+  b0 : 
+  {
+    value_name = "isPoweredOn";
+    sensor_function = 19;
+  }
+  b1 : 
+  {
+    value_name = "isReadyForUse";
+    sensor_function = 11;
+  }
+};
+sensor_values :
+{
+  s0 : 
+  {
+    value_name = "currentTemperature";
+    sensor_type = 1;
+    sensor_usage = 1;
+  }
+  s1 : 
+  {
+    value_name = "currentHumidity";
+    sensor_type = 2;
+    sensor_usage = 1;
+  }
+  s2 : 
+  {
+    value_name = "selectedSaunaTemperature";
+    sensor_type = 1;
+    sensor_usage = 1;
+  }
+  s3 : 
+  {
+    value_name = "selectedSanariumTemperature";
+    sensor_type = 1;
+    sensor_usage = 1;
+  }
+}
+

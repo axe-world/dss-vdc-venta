@@ -1,0 +1,61 @@
+reload_values = 60;
+zone_id = 65534;
+debug = 7;
+humifier : 
+{
+  id = "Venta";
+  name = "AH550";
+  ip = "";
+  scenes : 
+  {
+    s0 : 
+    {
+      dsId = 5;
+      fan = 1;
+      mode_sleep = 1;
+    };
+    s1 : 
+    {
+      dsId = 17;
+      fan = 2;
+      mode_sleep = 1;
+    };
+    s2 : 
+    {
+      dsId = 18;
+      fan = 3;
+      mode_sleep = 1;
+    };
+    s3 : 
+    {
+      dsId = 19;
+      mode_automatic = 1;
+    };
+    s4 : 
+    {
+      dsId = 32;
+      mode_sleep = 1;
+    };
+  };
+};
+sensor_values : 
+{
+  s0 : 
+  {
+    value_name = "temp";
+    sensor_type = 1;
+    sensor_usage = 1;
+  };
+  s1 : 
+  {
+    value_name = "hum";
+    sensor_type = 2;
+    sensor_usage = 1;
+  };
+  s2 : 
+  {
+    value_name = "humt";
+    sensor_type = 2;
+    sensor_usage = 1;
+  };
+};
