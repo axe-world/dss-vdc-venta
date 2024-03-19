@@ -22,10 +22,8 @@ Section "humifier" contains the Venta humifier device configuration:
  Section scenes in section humifier contains the digitalSTROM scenes configuration:
  section s0 to s19 (current maximum is 20 scenes) in section scenes contains the digitalSTROM scenes configuration: 
         dsId = Id of the DigitalStrom scene ; Scene 1 is dsId = 5, Scene 2 is dsID = 17, Scene 3 is dsId = 18, Scene 4 is dsId = 19 (see table 1 below)
-        section modbus in every scene section contains the modbus registers and values to be written on Helios device
-        section m0 to m09 (current maximum is 10 modbus values) in section modbus:
-          register = modbus register to be changed / written; for documentation of the Helios KWL modbus registers and allowed values see Helios documentation in folder helios-modbus-docu
-          value = value to be written into the modbus register
+        mode_sleep = 0 or 1 to turn sleep mode off / on
+        mode_automatic = 0 or 1 to turn automatic mode off / on
 
 Section "sensor_values" contains the Venta humifier values which should be reported as value sensor ("Sensorwert") to DSS
 
