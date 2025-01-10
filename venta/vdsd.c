@@ -162,6 +162,8 @@ void vdc_callscene_cb(dsvdc_t *handle __attribute__((unused)), char **dsuid, siz
         venta_get_data();
         if (scene_data->mode_sleep > 0) {            
           venta_set_mode_sleep(true);
+	  venta_set_fan(4);
+          venta_set_fan(4);	
         } else if (scene_data->mode_sleep == 0) {            
           venta_set_mode_sleep(false);
         }
