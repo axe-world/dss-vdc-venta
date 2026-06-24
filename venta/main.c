@@ -156,15 +156,7 @@ void push_sensor_data() {
     }
   }
   
-  if (dsvdc_property_new (&prop) != DSVDC_OK) {
-    vdc_report(LOG_ERR, "create new property failed!");
-  }
-  dsvdc_property_add_string (prop, "name", "SaunaConnected");
-  dsvdc_property_add_string (prop, "value", "1");
-  dsvdc_property_add_property (propDevState, 0, &prop);
-
   dsvdc_property_add_property (pushEnvelope, "sensorStates", &propState);
-  dsvdc_property_add_property (pushEnvelope, "deviceStates", &propDevState);
   dsvdc_push_property (handle, humifier_device->dsuidstring, pushEnvelope);
   dsvdc_property_free (pushEnvelope);  
 }
