@@ -471,11 +471,11 @@ void vdc_getprop_cb(dsvdc_t *handle, const char *dsuid, dsvdc_property_t *proper
       
       nProp = create_action_property("dynamic.ActFan2", "04-Fanspeed 2", "04-Fanspeed 2");          
       //snprintf(propIndex, 64, "%d", i++);
-      dsvdc_property_add_property(reply, "ActFan1", &nProp);
+      dsvdc_property_add_property(reply, "ActFan2", &nProp);
       
       nProp = create_action_property("dynamic.ActFan3", "05-Fanspeed 3", "05-Fanspeed 3");          
       //snprintf(propIndex, 64, "%d", i++);
-      dsvdc_property_add_property(reply, "ActFan1", &nProp);
+      dsvdc_property_add_property(reply, "ActFan3", &nProp);
       
       nProp = create_action_property("dynamic.ActSleepModeOn", "06-Schlafmodus an", "06-Schlafmodus an");          
       //snprintf(propIndex, 64, "%d", i++);
@@ -506,7 +506,7 @@ void vdc_getprop_cb(dsvdc_t *handle, const char *dsuid, dsvdc_property_t *proper
       }
       
       dsvdc_property_add_string(reply, "name", "Venta Humifier");
-      dsvdc_property_add_uint(reply, "defaultGroup", 3);
+      dsvdc_property_add_uint(reply, "defaultGroup", 8);
       dsvdc_property_add_uint(reply, "function", 0);
       dsvdc_property_add_uint(reply, "outputUsage", 1);
       dsvdc_property_add_bool(reply, "variableRamp", true);
